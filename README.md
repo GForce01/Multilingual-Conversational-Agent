@@ -1,5 +1,8 @@
 # VR Session With Multilingual Virtual Agent
-This is a VR icebreaker session with a multilingual conversational virtual agent aimed 
+This is a VR icebreaker session with a multilingual conversational virtual agent aimed to reduce foreign language anxiety for non-native speaker by allowing them to speak casually using their mother tongue while listening the virtual agent's speech in the target language (English by default).
+
+Talk to the agent like **using a walkie talkie** - press and hold the talk button (A button on the Oculus right controller by default) to speak, release when you want to finish.
+
 # Setup instructions
 Most of the scripts that requires setting up were attached to the AIManager object in the scene. Additionally, the gaze model was attached to the avatar's root and the lip-sync attached to it's head.
 
@@ -44,15 +47,20 @@ Under Model Settings, there are useful parameters to choose models, coversation 
 
 ### System prompt & structured reply
 The system prompt defines the default settings and knowledge of the LLM instance, it may contains information such as personalities, tasks, environment context, and even the agent's native language.
+* The **default reply language** of the agent is defined in the system prompt.
 
 To costomize the system prompt, write it down in a .txt file and assign it to the *System Prompt Asset*.
 
 The JSON schema allows the LLM to output in a predefined format. Read [https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat](this) for a better explaination.
 
-## Model config
+## Setting up the Text To Speech service
+The *Selected Voice* parameter allows selecting a voice for the agent, this is useful when changing the avatar appearence for the agent, [https://platform.openai.com/docs/guides/text-to-speech#voice-options](here) to find the complete voice list and samples.
 
-## Other settings
-
+## Other settings and notes
+* The emotion animations for the avatar were downloaded from Mixamo and many of them were meant for more cartoon styled characters. During the pilot study, many participants complain that the animation were over exaggerated. This can be switched off with the *Play Emotion Animation* option in the LLMDialogueManager, switching it off will result in the agent always speak with the nutural animation.
+* The gaze and head model is not made for making quick turns, it's advised to limit the participants' movement range.
+* The talk button was bound using the *\[BuildingBlock\] Controller Buttons Mapper*, more controls can be added through the same way.
+* It's common to experience a lag or slight freeze during the first transcription task of each session, this is due to Mic warming up.
 
 ## Research paper
-https://dl.acm.org/doi/10.1145/3717511.3749308
+My research paper can be found here: [https://dl.acm.org/doi/10.1145/3717511.3749308] 
