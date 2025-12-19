@@ -10,14 +10,14 @@ For simplicity, the project keeps the API key with a local parameter instead of 
 
 To start, go to Assets/Scripts/APIKeys.cs and replace the string with your own key.
 
-#### IMPORTANT SAFTY WARNING
+##### IMPORTANT SAFTY WARNING
 API keys should ***Always be kept secret*** and never shared. To avoid accidently commiting to online repo, as soon as you pulled the repo, run the following command:
 ```
 git update-index --assume-unchanged Assets/Scripts/APIKeys.cs
 ```
 This will let git ignore the changes to the APIKeys script.
 
-#### API cost
+##### API cost
 Although the API usage isn't free, the cost of this project is quite low. As a reference, the development and 10 pilot sessions together only cost $0.28.
 
 ### Setting up the Transcribe service
