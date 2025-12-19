@@ -3305,7 +3305,7 @@ Transform:
   m_GameObject: {fileID: 121433597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.241, y: 0.02, z: 1.232}
+  m_LocalPosition: {x: -1.247, y: 0.094, z: 1.452}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12063,8 +12063,8 @@ GameObject:
   m_Component:
   - component: {fileID: 347361751}
   - component: {fileID: 347361749}
-  - component: {fileID: 347361753}
   - component: {fileID: 347361752}
+  - component: {fileID: 347361753}
   - component: {fileID: 347361748}
   m_Layer: 0
   m_Name: AIManager
@@ -12085,7 +12085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4dab70a5e433d48af60a489a601add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TTS
-  animator: {fileID: 5866666019853322228}
+  dialogueManager: {fileID: 347361753}
   avatarState: {fileID: 5866666019853322229}
   audioSource: {fileID: 2063006314}
   selectedVoice: 1
@@ -12135,6 +12135,7 @@ MonoBehaviour:
   preferredDeviceNames:
   - OCULUS
   - REALTEK
+  canRecord: 1
   dialogueManager: {fileID: 347361753}
   languageMode: 0
 --- !u!114 &347361753
@@ -12165,6 +12166,8 @@ MonoBehaviour:
     \"emotion\"\r\n            ],\r\n            \"additionalProperties\": false\r\n       
     },\r\n        \"strict\": true\r\n    }"
   systemPromptAsset: {fileID: 4900000, guid: 0744be8f8565e6a4e8c35c6d487c2da9, type: 3}
+  animator: {fileID: 5866666019853322228}
+  PlayEmotionAnimations: 1
 --- !u!1 &355034716
 GameObject:
   m_ObjectHideFlags: 0
