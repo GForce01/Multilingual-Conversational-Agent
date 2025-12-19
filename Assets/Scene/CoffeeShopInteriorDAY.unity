@@ -12101,7 +12101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90455b09d2f96624ebc661c810747ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  apiKey: Your API Keys Here!
 --- !u!4 &347361751
 Transform:
   m_ObjectHideFlags: 0
@@ -12133,7 +12132,9 @@ MonoBehaviour:
   translate: 0
   silenceThreshold: 0.02
   minSilenceLength: 1
-  preferedDeviceName: Oculus
+  preferredDeviceNames:
+  - OCULUS
+  - REALTEK
   dialogueManager: {fileID: 347361753}
   languageMode: 0
 --- !u!114 &347361753
@@ -109888,7 +109889,13 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'CC_Base_R_Foot'\n\tTransform 'CC_Base_R_Calf'\n\tTransform
+    'CC_Base_L_Mid3'\n\tTransform 'CC_Base_R_Index2'\n\tTransform 'CC_Base_L_Index2'\n\tTransform
+    'CC_Base_BoneRoot'\n\tTransform 'CC_Base_L_Pinky2'\n\tTransform 'CC_Base_R_Pinky2'\n\tTransform
+    'CC_Base_Head'\n\tTransform 'CC_Base_L_Mid2'\n\tand more ...\n\tFrom animation
+    clip '2Stand_Chat_G2_M2'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

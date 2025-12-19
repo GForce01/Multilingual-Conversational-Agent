@@ -31,10 +31,11 @@ public class Transcribe : MonoBehaviour
     /// <summary>
     /// Set your prefered device name here to auto select microphone, if unsure, test run for once and check the log of all device names
     /// </summary>
-    [SerializeField] private string preferedDeviceName = "Oculus";
+    [SerializeField] private string[] preferredDeviceNames;
     private string deviceName;
     private bool isRecording = false;
     // Recording should be disabled soon as the transcription starts and only be re-enabled when the agent finishes speaking or upon error
+    [SerializeField]
     private bool canRecord = true;
 
     [Space]
@@ -68,6 +69,8 @@ public class Transcribe : MonoBehaviour
         { LanguageMode.English, "en" }
     };
     private string GetLanguageCode(LanguageMode mode) => LanguageCodes.TryGetValue(mode, out var code) ? code : null;
+
+    private Coroutine stopButtonCoroutine;
 
     void Start()
     {
@@ -118,19 +121,22 @@ public class Transcribe : MonoBehaviour
 
                 if (Microphone.devices.Length > 1)
                 {
-                    bool foundPreferedDevice = false;
+                    bool foundPreferredDevice = false;
                     for (int i = 0; i < Microphone.devices.Length; i++)
                     {
                         Debug.Log(Microphone.devices[i]);
                         string device = Microphone.devices[i].ToUpper();
-                        if (device.Contains(preferedDeviceName))
+                        foreach (var preferredName in preferredDeviceNames)
                         {
-                            deviceName = Microphone.devices[i];
-                            foundPreferedDevice = true;
-                            break;
+                            if (device.Contains(preferredName.ToUpper()))
+                            {
+                                deviceName = Microphone.devices[i];
+                                foundPreferredDevice = true;
+                                break;
+                            }
                         }
                     }
-                    if (!foundPreferedDevice)
+                    if (!foundPreferredDevice)
                     {
                         deviceName = Microphone.devices[0];
                     }
@@ -180,19 +186,31 @@ public class Transcribe : MonoBehaviour
     public void OnStartButtonPressed()
     {
         Debug.Log("record button pressed");
-        if (canRecord)
+        if (stopButtonCoroutine != null)
         {
-            StartRecording();
+            StopCoroutine(stopButtonCoroutine);
+            Debug.Log("Stop button pressed again within 1 second, resuming recording.");
         }
         else
         {
-            Debug.LogWarning("Cannot start recording now");
-        }
+            if (canRecord)
+                StartRecording();
+            else
+                Debug.LogWarning("Cannot start recording now");
+        } 
     }
 
     public void OnStopButtonPressed()
     {
+        stopButtonCoroutine = StartCoroutine(HandleStopButtonPress());
+    }
+
+    private IEnumerator HandleStopButtonPress()
+    {
+        Debug.Log("Stop button pressed, waiting for 0.5 second to confirm.");
+        yield return new WaitForSeconds(0.5f);
         StopRecording();
+        stopButtonCoroutine = null;
     }
 
     private void StartRecording()
@@ -200,6 +218,7 @@ public class Transcribe : MonoBehaviour
         Debug.Log("-> StartRecording() - " + deviceName);
         audioClip = Microphone.Start(deviceName, false, CLIP_LENGTH, CLIP_FREQUENCY);
         isRecording = true;
+        canRecord = false;
     }
 
     private void StopRecording()
@@ -227,7 +246,6 @@ public class Transcribe : MonoBehaviour
         }
 
         Debug.Log("Recording finished, uploading...");
-        canRecord = false;
         StartCoroutine(UploadRecording());
     }
 

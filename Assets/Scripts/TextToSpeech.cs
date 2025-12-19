@@ -7,11 +7,8 @@ using UnityEngine.Networking;
 
 public class TextToSpeech : MonoBehaviour
 {
-    [SerializeField]
-    private Animator animator;
-
-    [SerializeField]
-    private AvatarState avatarState;
+    [SerializeField] LLMDialogueManager dialogueManager;
+    [SerializeField] private AvatarState avatarState;
 
     public AudioSource audioSource;
 
@@ -58,23 +55,8 @@ public class TextToSpeech : MonoBehaviour
 
     public void CreateSpeech(string message, string emotion)
     {
-        HandleEmotion(emotion);
+        dialogueManager.HandleEmotion(emotion);
         StartCoroutine(SendTTSRequest(message));
-    }
-
-    private void HandleEmotion(string emotion)
-    {
-        Emotion detectedEmotion = ParseEmotion(emotion);
-        emotionCache = detectedEmotion.ToString();
-    }
-
-    private Emotion ParseEmotion(string emotion)
-    {
-        if (System.Enum.TryParse(emotion, true, out Emotion result))
-        {
-            return result;
-        }
-        return Emotion.neutral;
     }
 
     IEnumerator SendTTSRequest(string textToConvert)
@@ -143,7 +125,7 @@ public class TextToSpeech : MonoBehaviour
                 OnAudioPlayback?.Invoke(true);
 
                 // Play animation based on emotion
-                animator.SetBool(emotionCache, true);
+                dialogueManager.StartTalkingAnimation();
 
                 yield return new WaitForSeconds(clip.length);
 
@@ -153,7 +135,7 @@ public class TextToSpeech : MonoBehaviour
                     File.Delete(filePath);
                 }
                 // Stop animation
-                animator.SetBool(emotionCache, false);
+                dialogueManager.StopTalkingAnimation();
 
                 // Restore recording
                 OnAudioPlayback?.Invoke(false);

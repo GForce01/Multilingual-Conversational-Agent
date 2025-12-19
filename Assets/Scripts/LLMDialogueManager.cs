@@ -70,6 +70,22 @@ public class LLMDialogueManager : MonoBehaviour
     public delegate void GenerationFailedHandler(bool isComplete);
     public static event GenerationFailedHandler OnGenerationFailed;
 
+    [Space]
+    [Header("Avatar Settings")]
+    [SerializeField] private Animator animator;
+    public bool PlayEmotionAnimations = true;
+
+    public enum Emotion
+    {
+        neutral,
+        happy,
+        sad,
+        angry,
+        surprised,
+        confused
+    }
+    string emotionCache;
+
     private void Start()
     {
         // Load Api Key
@@ -235,6 +251,36 @@ public class LLMDialogueManager : MonoBehaviour
     {
         conversationHistory.Clear();
         conversationHistory.Add(new Message { role = "system", content = systemPrompt });
+    }
+
+    public void HandleEmotion(string emotion)
+    {
+        if (!PlayEmotionAnimations)
+        {
+            emotionCache = Emotion.neutral.ToString();
+            return;
+        }
+        Emotion detectedEmotion = ParseEmotion(emotion);
+        emotionCache = detectedEmotion.ToString();
+    }
+
+    private Emotion ParseEmotion(string emotion)
+    {
+        if (System.Enum.TryParse(emotion, true, out Emotion result))
+        {
+            return result;
+        }
+        return Emotion.neutral;
+    }
+
+    public void StartTalkingAnimation()
+    {
+        animator.SetBool(emotionCache, true);
+    }
+
+    public void StopTalkingAnimation()
+    {
+        animator.SetBool(emotionCache, false);
     }
 }
 
