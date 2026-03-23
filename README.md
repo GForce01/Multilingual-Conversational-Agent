@@ -52,7 +52,7 @@ Under Model Settings, there are useful parameters to choose models, conversation
 The system prompt defines the default settings and knowledge of the LLM instance; it may contain information such as personalities, tasks, environment context, and even the agent's native language.
 * The **default reply language** of the agent is defined in the system prompt.
 
-To customise the system prompt, write it down in a .txt file and assign it to the *System Prompt Asset*.
+To customise the system prompt, go to Create -> AI -> System Prompt Asset to create a new system promt asset, type in the prompt in the editor and assign it to the *System Prompt Asset*.
 
 The JSON schema allows the LLM to output in a predefined format. Read [https://platform.openai.com/docs/guides/structured-outputs?api-mode=chat](this) for a better explanation.
 
