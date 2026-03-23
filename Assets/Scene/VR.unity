@@ -12262,7 +12262,7 @@ MonoBehaviour:
     }\r\n            },\r\n            \"required\": [\r\n                \"content\",\r\n               
     \"emotion\"\r\n            ],\r\n            \"additionalProperties\": false\r\n       
     },\r\n        \"strict\": true\r\n    }"
-  systemPromptAsset: {fileID: 4900000, guid: 0744be8f8565e6a4e8c35c6d487c2da9, type: 3}
+  systemPromptAsset: {fileID: 11400000, guid: 21837bd322e8f104cbdf9a2736684143, type: 2}
   animator: {fileID: 5866666019853322228}
   PlayEmotionAnimations: 1
 --- !u!1 &355034716

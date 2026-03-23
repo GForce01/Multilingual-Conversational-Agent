@@ -62,7 +62,7 @@ public class LLMDialogueManager : MonoBehaviour
         },
         ""strict"": true
     }";
-    [SerializeField] private TextAsset systemPromptAsset; // Write system promt in a txt file and assign it in the inspector
+    [SerializeField] private SystemPromptAsset systemPromptAsset;
     private string systemPrompt;
 
     private bool canGenerateDialogue = true;
@@ -92,14 +92,15 @@ public class LLMDialogueManager : MonoBehaviour
         apiKey = APIKeys.APIKey;
 
         // Check if a system prompt is assigned
-        if (systemPromptAsset != null)
+        if (TryLoadSystemPrompt())
         {
-            systemPrompt = systemPromptAsset.text;
             // Add system prompt to the conversation history
             conversationHistory.Add(new Message { role = "developer", content = systemPrompt });
         }
         else
-            Debug.LogError("Please assign a system prompt TextAsset in the Inspector!");
+        {
+            Debug.LogError("Please assign a SystemPromptAsset in the Inspector!");
+        }
         // Disable dialogue generation when audio is playing.
         // The OnAudioPlayback is a static event so nomatter which instance of TextToSpeech triggers it, this will be notified
         // The event will be triggered either when playback starts or ends with a boolean parameter
@@ -157,7 +158,7 @@ public class LLMDialogueManager : MonoBehaviour
 
         string jsonPayload = JsonConvert.SerializeObject(requestData, Formatting.Indented);
 
-        using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST")) //虽然UnityEngine.Networking已经包含了UnityWebRequest，但这里使用using语句来管理其生命周期！！！
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl, "POST")) // Use using to ensure the request object is disposed correctly.
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -211,7 +212,7 @@ public class LLMDialogueManager : MonoBehaviour
                 string npcReply = actualResponse.content;
                 string emotion = actualResponse.emotion;
 
-                // 更新对话历史
+                // Update conversation history
                 conversationHistory.Add(new Message { role = "assistant", content = npcReply });
 
                 HandleRespond(npcReply, emotion);
@@ -250,7 +251,23 @@ public class LLMDialogueManager : MonoBehaviour
     public void ClearConversation()
     {
         conversationHistory.Clear();
-        conversationHistory.Add(new Message { role = "system", content = systemPrompt });
+
+        if (TryLoadSystemPrompt())
+        {
+            conversationHistory.Add(new Message { role = "developer", content = systemPrompt });
+        }
+    }
+
+    private bool TryLoadSystemPrompt()
+    {
+        if (systemPromptAsset == null)
+        {
+            systemPrompt = string.Empty;
+            return false;
+        }
+
+        systemPrompt = systemPromptAsset.Prompt;
+        return !string.IsNullOrWhiteSpace(systemPrompt);
     }
 
     public void HandleEmotion(string emotion)
